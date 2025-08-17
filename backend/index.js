@@ -1,10 +1,14 @@
 import express from "express"
+import route from "./src/routes/index.routes.js"
+import {conectBd} from "./src/database/bd.js"
+
 const app = express()
 const port = 3000
-app.get("/teste", (req, res) => {
-    res.sen("Olá")
-})
+app.use(express.json())
+app.use("/", route)
 
 app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`)
+    console.log("Servidor rodando!")
+    conectBd()
 })
+
