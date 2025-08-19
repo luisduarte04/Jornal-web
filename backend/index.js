@@ -1,5 +1,5 @@
 import express from "express"
-import route from "./src/routes/index.routes.js"
+import route from "./src/routes/users.route.js"
 import {conectBd} from "./src/database/bd.js"
 
 const app = express()
