@@ -13,7 +13,7 @@ model Users{
   username   String   
   email      String   
   password   String
-  avatar     String?  // "?" significa opcional
+  avatar     String?  // "?"  opcional
   background String?  // opcional
   createdAt  DateTime @default(now())
 }

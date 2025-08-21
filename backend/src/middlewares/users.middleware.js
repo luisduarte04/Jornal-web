@@ -7,4 +7,15 @@ const validateUser = (req, res, next) => {
     next()
 }
 
-export default {validateUser}
+const validatorId = (req, res, next) => {
+    const id = req.params.id
+    if(!id || isNaN(Number(id))){
+        console.error("Erro: ")
+        return res.status(400).send({message: "Id inválido",});
+    }
+    next()
+}
+
+
+
+export default {validateUser, validatorId}

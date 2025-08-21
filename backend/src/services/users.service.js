@@ -10,6 +10,18 @@ const getUsers = () => {
     return prisma.users.findMany()
 }
 
+const findById = (id) => {
+    return prisma.users.findUnique({
+        where: {id : Number(id)}
+    }
+    )
+}
 
+const updateUser = (id, data) => {
+    return prisma.users.update({
+        where: { id: Number(id) },
+        data
+    })
+}
 
-export default {createUser, getUsers}
+export default {createUser, getUsers, findById, updateUser}
