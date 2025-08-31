@@ -1,7 +1,14 @@
 import {prisma} from "../database/bd.js"
+import bcryypt from "bcrypt"
 
-const createUser = (data) => {
-    return prisma.users.create({data})
+const createUser = async (data) => {
+    const hashedPassword = await bcryypt.hash(data.password, 10)
+    return prisma.users.create({
+        data: {
+            ...data,
+            password: hashedPassword
+        }
+    });
 }
 
 

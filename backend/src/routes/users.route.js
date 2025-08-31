@@ -1,15 +1,16 @@
 import express from "express"
-import controlle from "../controllers/users.controller.js"
-import middlawares from "../middlewares/users.middleware.js"
+import userController from "../controllers/users.controller.js"
+import userMiddleware from "../middlewares/users.middleware.js"
 
-const route = express.Router()
+const userRoute = express.Router()
 
-route.post("/", middlawares.validateUser ,controlle.createUser)
+userRoute.post("/", userMiddleware.validateUser, userController.createUser)
 
-route.get("/", controlle.getUsers)
 
-route.get("/:id", middlawares.validatorId , controlle.getByID)
+userRoute.get("/", userController.getUsers)
 
-route.patch("/:id", middlawares.validatorId , controlle.updateUser)
+userRoute.get("/:id", userMiddleware.validatorId , userController.getByID)
 
-export default route
+userRoute.patch("/:id", userMiddleware.validatorId , userController.updateUser)
+
+export default userRoute 

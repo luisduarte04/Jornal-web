@@ -1,8 +1,8 @@
-import service from "../services/users.service.js"
+import userService from "../services/users.service.js"
 
 const createUser = async (req, res) =>{
     try{   
-        const {name, username, email} = await service.createUser(req.body)
+        const {name, username, email} = await userService.createUser(req.body)
         res.status(201).send({
             name,
             username,
@@ -12,11 +12,11 @@ const createUser = async (req, res) =>{
         res.status(500).send("Erro")
         console.error("Erro:  ", err)
     }
-}
+} 
 
 const getUsers = async (req, res) => {
     try{
-        const users = await service.getUsers()
+        const users = await userService.getUsers()
         const filterUsers = users.map(({id, name, username, email}) => ({id, name, username, email}))
         console.log("Buscamos os usuários")
         res.status(200).send(filterUsers)
@@ -29,7 +29,7 @@ const getUsers = async (req, res) => {
 const getByID = async (req, res) => {
     const id = req.params.id
     try{
-        const user = await service.findById(id)
+        const user = await userService.findById(id)
         if (!user) {
             return res.status(404).send({ message: "Usuário não encontrado" })
         }
@@ -45,7 +45,7 @@ const updateUser = async (req, res) => {
     const id = req.params.id
     const data = req.body
     try{
-        const user = await service.findById(id)
+        const user = await userService.findById(id)
         if (!user) {
             return res.status(404).send({ message: "Usuário não encontrado" })
         }
