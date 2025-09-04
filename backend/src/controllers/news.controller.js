@@ -15,7 +15,11 @@ const getNews = async (req, res) => {
 
 const createNews = async(req, res) => {
     try{
-        const news = await newsService.createNews(req.body)
+        const {title, text, banner, userId} = req.body
+        const news = await newsService.createNews({
+            title, text, banner, userId
+        })
+        console.log(news)
         res.status(200).send(news)
         
 
