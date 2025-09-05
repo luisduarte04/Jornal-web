@@ -27,7 +27,7 @@ const getUsers = async (req, res) => {
 }
 
 const getByID = async (req, res) => {
-    const id = req.params.id
+    const { id } = req.params
     try{
         const user = await userService.findById(id)
         if (!user) {

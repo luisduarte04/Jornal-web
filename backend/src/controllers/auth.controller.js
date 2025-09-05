@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt"
-import { loginService, generateToken } from "../services/auth.service.js"
+import { loginService } from "../services/auth.service.js"
+import {generateToken} from "../utils/jwt.utils.js"
 
 
 

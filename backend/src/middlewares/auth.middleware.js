@@ -1,6 +1,7 @@
 import dotenv, { config } from "dotenv"
 import jwt, { decode } from "jsonwebtoken"
 import userController from "../controllers/users.controller.js"
+import {prisma} from "../database/bd.js"
 
 dotenv.config()
 
@@ -9,15 +10,15 @@ export const authMiddleware = (req, res, next) => {
 
         const {authorization} = req.headers
             if(!authorization){
-                return res.status(400)
+                return res.status(401)
             }
             const parts = authorization.split(" ")
             const [schema, token] = parts
             if(schema != "Bearer" ){
-                return res.status(400).send("Sem Bearer")
+                return res.status(401).send("Sem Bearer")
             }
             if (parts.length != 2){
-                return res.status(400).send("Authorization com error")
+                return res.status(401).send("Authorization com error")
             } 
     
     
@@ -26,13 +27,18 @@ export const authMiddleware = (req, res, next) => {
 
                     if(error){
                         console.log("Erro ao validar token jwt")
-                        res.status(400).send("Erro ao validar token jwt")
+                        return res.status(401).send("Erro ao validar token jwt")
                     }
                     console.log(decoded)
+
+                    req.userId = decoded.id
+
+                    
+
                     next()
                 } catch(err){
                     console.log("Erro ao cadastrar news", err)
-                    res.status(400).send("Erro ao cadastrar news", err)
+                    return res.status(400).send("Erro ao cadastrar news", err)
                 }
             })
             
