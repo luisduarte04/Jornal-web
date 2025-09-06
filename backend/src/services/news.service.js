@@ -31,4 +31,61 @@ const topNews = () => {
     })
 }
 
-export default {getNews, createNews, countNews, topNews}
+
+const getById = (id) => {
+    return prisma.news.findUnique({
+        where: { id: Number(id)},
+        include: {
+            user: true
+        },
+    })
+}
+
+
+const searchNews = (title) => {
+    return prisma.news.findMany({
+        where: {
+            title: {
+                contains: title,
+            },
+        },
+        include: { user: true },
+        orderBy: { id: "desc" },
+    });
+};
+
+const byUser = (id) => {
+    return prisma.news.findMany({
+        where: {userId: id},
+        include: { user: true },
+        orderBy: { id: "desc" }
+    }
+    )
+
+}
+
+const updateNews = (id, data) => {
+    return prisma.news.update({
+        where: { id: Number(id) },
+        data: {
+            title: data.title,
+            text: data.text,
+            banner: data.banner,
+        },
+    });
+}
+
+const deleteNews = (id) => {
+    return prisma.news.delete({
+        where: { id: Number(id)}
+    })
+}
+
+const likeNew = (id) => {
+    return prisma.news.update({
+        where: {id: Number(id)},
+        
+    })
+}
+
+export default {getNews, createNews, countNews, topNews, getById, searchNews, byUser, updateNews, deleteNews, likeNew}

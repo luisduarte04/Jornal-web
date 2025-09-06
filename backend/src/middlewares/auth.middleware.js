@@ -1,8 +1,5 @@
 import dotenv, { config } from "dotenv"
 import jwt, { decode } from "jsonwebtoken"
-import userController from "../controllers/users.controller.js"
-import {prisma} from "../database/bd.js"
-
 dotenv.config()
 
 export const authMiddleware = (req, res, next) => {
@@ -32,6 +29,7 @@ export const authMiddleware = (req, res, next) => {
                     console.log(decoded)
 
                     req.userId = decoded.id
+                    console.log(req.userId)
 
                     
 

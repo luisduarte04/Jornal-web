@@ -8,6 +8,11 @@ const newsRoute = Router()
 newsRoute.get("/", newsController.getNews)
 newsRoute.post("/", authMiddleware, newsController.createNews)
 newsRoute.get("/top", newsController.topNews)
-
+newsRoute.get("/search", newsController.searchNews)
+newsRoute.get("/byUser", authMiddleware,  newsController.byUser)
+newsRoute.get("/:id",  newsController.getById)
+newsRoute.patch("/:id", authMiddleware, newsController.updateNews)
+newsRoute.delete("/:id", authMiddleware, newsController.deleteNews)
+newsRoute.patch("/like/:id", authMiddleware, newsController.likeNew)
 
 export default newsRoute

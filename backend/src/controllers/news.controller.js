@@ -1,4 +1,3 @@
-
 import newsService from "../services/news.service.js"
 import { generateToken } from "../utils/jwt.utils.js"
 
@@ -26,18 +25,14 @@ const getNews = async (req, res) => {
         const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null;
 
 
-        const updatedNews = news.map((item) => {
-            const token = generateToken(item.userId); 
-            return { ...item, userId: token };
-        });
-
+        // Não substituindo userId por token, mantendo consistência
         res.status(200).send({
             nextUrl,
             previousUrl,
             limit,
             offset,
             total,
-            results: updatedNews.map((item) => ({
+            results: news.map((item) => ({
                 id: item.id,
                 title: item.title,
                 text: item.text,
@@ -59,18 +54,15 @@ const createNews = async(req, res) => {
     try{
         const {title, text, banner} = req.body
         const userId = req.userId
-        const token = req.headers.authorization.split(" ")[1]
+        // userId vem do token JWT através do middleware de autenticação
         const news = await newsService.createNews({
             title, 
             text, 
             banner, 
             userId
         })
-        const response = {
-            ...news, userId: token
-        }
-        console.log(response)
-        res.status(200).send(response);
+        console.log(news)
+        res.status(200).send(news);
         
 
     }catch(err){
@@ -107,4 +99,139 @@ const topNews = async(req, res) => {
     }
 }   
 
-export default {getNews, createNews, topNews}
+const getById = async (req, res) => {
+    try{
+        const id = req.params.id
+        const news = await newsService.getById(id)
+        if(!id){
+            return res.status(400).send("News não encontrada")
+        }
+        res.status(200).send({
+            News: {
+                id: news.id,
+                title: news.title,
+                text: news.text,
+                banner: news.banner,
+                createdAt: news.createdAt,
+                userId: news.userId, 
+                name: news.user.name,
+                username: news.user.username,
+                password: news.user.password
+            }
+        })
+
+    }catch(err){
+        console.log(err)
+        res.status(500).send("News não encontrada", err)
+    }
+}
+
+
+const searchNews = async (req, res) => {
+    try {
+        const { title } = req.query;
+
+        const serch = await newsService.searchNews(title);
+
+        if (!serch || serch.length === 0) {
+            return res.status(404).send("Nenhuma notícia encontrada");
+        }
+
+        res.status(200).send({
+            results: serch.map((item) => ({
+                id: item.id,
+                title: item.title,
+                text: item.text,
+                banner: item.banner,
+                createdAt: item.createdAt,
+                userId: item.userId,
+                name: item.user.name,
+                username: item.user.username,
+            })),
+        });
+    } catch (err) {
+        console.error("Erro ao buscar notícias:", err);
+        res.status(500).send("Erro ao buscar notícias");
+    }
+};
+
+const byUser = async (req, res) => {
+    try{
+        const id = req.userId
+        const news = await newsService.byUser(id)
+        if (!id) {
+            return res.status(404).send("Nenhum ID");
+        }
+        res.status(200).send({
+            results: news.map((item) => ({
+                id: item.id,
+                title: item.title,
+                text: item.text,
+                banner: item.banner,
+                createdAt: item.createdAt,
+                userId: item.userId,
+                name: item.user.name,
+                username: item.user.username,
+            })),
+        });
+    } catch(err){
+        console.error("Erro ao buscar notícias:", err);
+        res.status(500).send("Erro ao buscar notícias");
+    }
+}
+
+const updateNews = async (req, res) => {
+    try{
+        const id = req.params.id
+    const {title, text, banner} = req.body
+    const news = await newsService.getById(id)
+    if( news.userId != req.userId){
+        console.log("Não pode atualizar a noticia")
+        res.send("Não pode atualizar a noticia")
+    }
+    const update = await newsService.updateNews(id, {title, text, banner})
+    res.status(200).send(update)
+    }catch(err){
+        console.log(err)
+        res.send(err)
+    }
+    
+}
+
+const deleteNews = async (req, res) => {
+    try{
+        const id = req.params.id
+        const news = await newsService.getById(id)
+        if(!news){
+            console.log("News não existe")
+            res.send("News não existe")
+        }
+        if( news.userId != req.userId){
+        console.log("Não pode deletar a noticia")
+        res.send("Não pode deletar noticia")
+    }
+        const deleteNews = await newsService.deleteNews(id)
+        res.status(200).send({deletado: deleteNews})
+    }catch(err){
+        console.log("erro: ", err)
+        res.send(err)
+    }
+
+}
+
+const likeNew = async (req, res) => {
+    try{
+        const id = req.params.id
+        const userId = req.userId
+        const likeNew = await newsService.likeNew(id, userId)
+        console.log(likeNew)
+
+
+    }catch(err){
+        console.log("erro: ", err)
+        res.send(err)
+    }
+
+}
+
+export default {getNews, createNews, topNews, getById, searchNews, byUser, updateNews, deleteNews, likeNew}

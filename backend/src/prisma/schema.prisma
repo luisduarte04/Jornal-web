@@ -24,6 +24,8 @@ model News{
   title     String
   text      String
   banner    String
+  likes     Json?     @default("[]") 
+  comments  Json?     @default("[]")
   createdAt DateTime @default(now())
   userId Int
   user Users @relation(fields: [userId], references: [id])
