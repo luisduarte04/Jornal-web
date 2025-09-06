@@ -13,7 +13,7 @@ const createUser = async (req, res) =>{
         console.error("Erro:  ", err)
     }
 } 
-
+ 
 const getUsers = async (req, res) => {
     try{
         const users = await userService.getUsers()
@@ -38,7 +38,6 @@ const getByID = async (req, res) => {
     }catch(err){
         res.status(400).send("Não existe id", err)
     }
-
 }
 
 const updateUser = async (req, res) => {

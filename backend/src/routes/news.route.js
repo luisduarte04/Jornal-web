@@ -7,6 +7,7 @@ const newsRoute = Router()
 
 newsRoute.get("/", newsController.getNews)
 newsRoute.post("/", authMiddleware, newsController.createNews)
+newsRoute.get("/top", newsController.topNews)
 
 
 export default newsRoute

@@ -1,7 +1,14 @@
 import {prisma} from "../database/bd.js"
 
-const getNews =  () => {
-    return  prisma.news.findMany()
+const getNews =  (offset, limit) => {
+    return  prisma.news.findMany({
+        orderBy: {id: "desc"},
+        skip: offset,
+        take: limit,
+        include: {
+            user: true
+        }
+    })
 }
 
 const createNews = async (data) => {
@@ -11,4 +18,17 @@ const createNews = async (data) => {
     })
 }
 
-export default {getNews, createNews}
+const countNews = () => {
+    return prisma.news.count()
+}
+
+const topNews = () => {
+    return prisma.news.findFirst({
+        orderBy: {id: "desc"},
+        include: {
+            user: true
+        }
+    })
+}
+
+export default {getNews, createNews, countNews, topNews}

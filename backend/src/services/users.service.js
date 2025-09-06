@@ -12,7 +12,7 @@ const createUser = async (data) => {
 }
 
 
-
+ 
 const getUsers = () => {
     return prisma.users.findMany()
 }

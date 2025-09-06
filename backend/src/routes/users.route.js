@@ -13,4 +13,4 @@ userRoute.get("/:id", userMiddleware.validatorId , userController.getByID)
 
 userRoute.patch("/:id", userMiddleware.validatorId , userController.updateUser)
 
-export default userRoute 
+export default userRoute  
