@@ -81,11 +81,36 @@ const deleteNews = (id) => {
     })
 }
 
-const likeNew = (id) => {
-    return prisma.news.update({
+const likeNew = async (id, userId) => {
+    const news = await prisma.news.findUnique({
         where: {id: Number(id)},
-        
+        select: {likes: true}
     })
+
+    const likes = news.likes || []
+    const hasLiked = likes.some((like) => like.userId === userId)
+
+    //remover o like, caso já tenha
+    if(hasLiked){
+        console.log("User já deu like, removendo...")
+        const deleteLike = likes.filter((like) => like.userId !== userId)
+        return await prisma.news.update({
+            where: {id: Number(id)},
+            data: { likes: deleteLike }
+        })
+    }
+
+    const newLike = {userId, created: new Date()}
+    likes.push(newLike)
+
+    return await prisma.news.update({
+        where: {id: Number(id)},
+        data: {likes}
+    })
+
 }
+
+
+
 
 export default {getNews, createNews, countNews, topNews, getById, searchNews, byUser, updateNews, deleteNews, likeNew}

@@ -220,18 +220,19 @@ const deleteNews = async (req, res) => {
 }
 
 const likeNew = async (req, res) => {
-    try{
-        const id = req.params.id
-        const userId = req.userId
-        const likeNew = await newsService.likeNew(id, userId)
-        console.log(likeNew)
+    try {
+        const id = req.params.id;
+        const userId = req.userId;
 
-
-    }catch(err){
-        console.log("erro: ", err)
-        res.send(err)
+        const newsLike = await newsService.likeNew(id, userId);
+        console.log("Like OK: ", newsLike)
+        res.status(200).send({like: newsLike});
+    } catch (err) {
+        console.error("Erro ao dar like:", err.message);
+        res.status(400).send({ error: err.message });
     }
+};
 
-}
+
 
 export default {getNews, createNews, topNews, getById, searchNews, byUser, updateNews, deleteNews, likeNew}
