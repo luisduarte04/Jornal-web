@@ -113,6 +113,8 @@ const getById = async (req, res) => {
                 text: news.text,
                 banner: news.banner,
                 createdAt: news.createdAt,
+                comment: news.comments,
+                like: news.likes,
                 userId: news.userId, 
                 name: news.user.name,
                 username: news.user.username,
@@ -234,5 +236,40 @@ const likeNew = async (req, res) => {
 };
 
 
+const addComment = async (req, res) => {
+    try{
+        const id = req.params.id
+        const userId = req.userId
+        const comment = req.body
+        if(!comment){
+            console.log("Sem comentário")
+            res.send("Sem comentário")
+        }
+    const newsComment = await newsService.addComment(id, userId, comment)
+    console.log(newsComment)
+    res.send(newsComment)
+    }catch(err){
+        console.log(err)
+    }
+    
+}
 
-export default {getNews, createNews, topNews, getById, searchNews, byUser, updateNews, deleteNews, likeNew}
+const deleteComment = async (req, res) => {
+    try{
+    const idNews = req.params.id
+    const idComment = req.params.idComment;
+    const userId = req.userId;
+    const deleted = await newsService.deleteComment(idNews, idComment, userId);
+
+    if (!deleted) {
+      return res.status(403).send("Você não pode deletar este comentário");
+    }
+    console.log("Deletado o comentário")
+    res.send({ message: "Comentário deletado com sucesso!" });
+        
+    } catch(err) {
+        console.log(err);
+        res.status(500).send("Erro ao deletar comentário");
+    }}
+
+export default {getNews, createNews, topNews, getById, searchNews, byUser, updateNews, deleteNews, likeNew, addComment, deleteComment}

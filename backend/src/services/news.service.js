@@ -110,7 +110,58 @@ const likeNew = async (id, userId) => {
 
 }
 
+const addComment = async (id, userId, comment) => {
+    const news = await prisma.news.findUnique({
+        where: { id: Number(id) },
+        select: { comments: true }
+    });
+
+    if (!news) {
+        throw new Error("Notícia não encontrada");
+    }
+
+    const idComment = Date.now() + Math.floor(Math.random() * 1000);
+    const newComment = {
+        idComment,
+        userId,
+        comment, 
+        created: new Date()
+    };
+    const updatedComments = [...(news.comments || []), newComment];
+
+    return await prisma.news.update({
+        where: { id: Number(id) },
+        data: { comments: updatedComments }
+    });
+};
 
 
+const deleteComment = async (idNews, idComment, userId) => {
+    const news = await prisma.news.findUnique({
+        where: { id: Number(idNews) },
+        select: { comments: true }
+    });
+    
+    if (!news) {
+        throw new Error("Notícia não encontrada");
+    }
 
-export default {getNews, createNews, countNews, topNews, getById, searchNews, byUser, updateNews, deleteNews, likeNew}
+    const comment = news.comments.find(c => String(c.idComment) === String(idComment));
+    if (!comment) {
+        throw new Error("Comentário não encontrado");
+    }
+
+    if (comment.userId !== userId) {
+        return false; 
+    }
+
+    const updatedComments = news.comments.filter(c => String(c.idComment) !== String(idComment));
+    await prisma.news.update({
+        where: { id: Number(idNews) },
+        data: { comments: updatedComments }
+    });
+    return true;
+}
+
+
+export default {getNews, createNews, countNews, topNews, getById, searchNews, byUser, updateNews, deleteNews, likeNew, addComment, deleteComment}

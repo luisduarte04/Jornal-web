@@ -14,5 +14,8 @@ newsRoute.get("/:id",  newsController.getById)
 newsRoute.patch("/:id", authMiddleware, newsController.updateNews)
 newsRoute.delete("/:id", authMiddleware, newsController.deleteNews)
 newsRoute.patch("/like/:id", authMiddleware, newsController.likeNew)
+newsRoute.patch("/comment/:id", authMiddleware, newsController.addComment)
+newsRoute.delete("/:id/comment/:idComment", authMiddleware, newsController.deleteComment)
 
-export default newsRoute
+
+export default newsRoute 
