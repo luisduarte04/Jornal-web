@@ -1,5 +1,4 @@
 import newsService from "../services/news.service.js"
-import { generateToken } from "../utils/jwt.utils.js"
 
 
 const getNews = async (req, res) => {
@@ -25,7 +24,6 @@ const getNews = async (req, res) => {
         const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null;
 
 
-        // Não substituindo userId por token, mantendo consistência
         res.status(200).send({
             nextUrl,
             previousUrl,
