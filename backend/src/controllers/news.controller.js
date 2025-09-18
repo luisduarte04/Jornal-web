@@ -7,7 +7,7 @@ const getNews = async (req, res) => {
         limit = Number(limit);
         offset = Number(offset);
         if (!limit && !offset) {
-            limit = 3;
+            limit = 6;
             offset = 0;
         }
         const news = await newsService.getNews(offset, limit);
@@ -39,7 +39,8 @@ const getNews = async (req, res) => {
                 userId: item.userId, 
                 name: item.user.name,
                 username: item.user.username,
-                password: item.user.password
+                likes : item.likes,
+                comments : item.comments
             })),
         });
     } catch (err) {
