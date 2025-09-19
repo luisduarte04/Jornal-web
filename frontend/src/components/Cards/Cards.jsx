@@ -1,22 +1,22 @@
 export default function Cards(props) {
   return (
-    <section className="flex flex-col gap-4 max-w-full shadow-[rgba(50,50,105,0.149)_0px_2px_5px_0px,_rgba(0,0,0,0.05)_0px_1px_1px_0px] rounded-md bg-white p-8">
-      <article className="flex items-center justify-center gap-4">
-        <div>
-          <h2 className="font-bold text-xl mb-4">{props.title}</h2>
-          <p>{props.text}</p>
+    <section className="flex flex-col gap-4 max-w-full shadow-md rounded-md bg-white p-6">
+      <article className="flex items-start gap-4">
+        <div className="flex-1">
+          <h2 className="font-bold text-lg mb-2 text-gray-800">{props.title}</h2>
+          <p className="text-sm text-gray-600">{props.text}</p>
         </div>
-        <img src={props.banner} alt="" className="w-[30%] object-cover object-center" />
+        <img src={props.banner} alt="Banner" className="w-32 h-32 object-cover rounded-md" />
       </article>
 
-      <article className="flex items-center gap-4">
-        <div className="flex items-center gap-1">
-          <i className="bi bi-hand-thumbs-up"></i>
-          <span>{props.likes}</span>
+      <article className="flex items-center gap-4 mt-4">
+        <div className="flex items-center gap-1 text-gray-500">
+          <i className="bi bi-hand-thumbs-up text-lg"></i>
+          <span className="text-sm">{props.likes}</span>
         </div>
-        <div className="flex items-center gap-1">
-          <i className="bi bi-chat-dots"></i>
-          <span>{props.comments}</span>
+        <div className="flex items-center gap-1 text-gray-500">
+          <i className="bi bi-chat-dots text-lg"></i>
+          <span className="text-sm">{props.comments}</span>
         </div>
       </article>
     </section>

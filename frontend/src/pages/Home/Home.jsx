@@ -12,7 +12,10 @@ export default function Home() {
     console.log(response.data.results.likes)
     setNews(response.data.results)
   }
-  findAllNews()
+  
+  useEffect(() => {
+    findAllNews()
+  }, [])
   console.log(news)
 
   

@@ -7,7 +7,7 @@ const getNews = async (req, res) => {
         limit = Number(limit);
         offset = Number(offset);
         if (!limit && !offset) {
-            limit = 6;
+            limit = 4;
             offset = 0;
         }
         const news = await newsService.getNews(offset, limit);
